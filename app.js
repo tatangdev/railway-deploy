@@ -6,6 +6,9 @@ const {
 const express = require('express');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./api-docs.yaml');
 
 const app = express();
 const router = require('./routes');
@@ -15,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(router);
 
 app.use((req, res, next) => {
